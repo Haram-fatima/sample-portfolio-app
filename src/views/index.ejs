@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; padding: 3rem 0; }
+        h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .devops-pipeline {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .step {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+        }
+        .step i { font-size: 2.5rem; margin-bottom: 1rem; }
+        .status {
+            background: rgba(0,255,0,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 DevOps Portfolio</h1>
+            <p>Complete CI/CD Pipeline with Docker & GitHub Actions</p>
+            <div class="status">✅ Deployment: <%= deployment %></div>
+        </div>
+        
+        <div class="devops-pipeline">
+            <div class="step">
+                <i class="fab fa-github"></i>
+                <h3>1. GitHub</h3>
+                <p>Code Repository</p>
+            </div>
+            <div class="step">
+                <i class="fab fa-docker"></i>
+                <h3>2. Docker</h3>
+                <p>Containerization</p>
+            </div>
+            <div class="step">
+                <i class="fas fa-code"></i>
+                <h3>3. GitHub Actions</h3>
+                <p>CI/CD Automation</p>
+            </div>
+            <div class="step">
+                <i class="fas fa-cloud"></i>
+                <h3>4. Render</h3>
+                <p>Auto-Deployment</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="/projects" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 1rem 2rem; border-radius: 5px;">
+                View Projects
+            </a>
+            <a href="/health" style="color: white; text-decoration: none; background: rgba(0,255,0,0.2); padding: 1rem 2rem; border-radius: 5px; margin-left: 1rem;">
+                Health Check
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+

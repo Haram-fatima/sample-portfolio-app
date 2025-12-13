@@ -1,63 +1,67 @@
+
 const express = require('express');
 const path = require('path');
-require('dotenv').config();
-
 const app = express();
 
-// View engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes using individual pages
 app.get('/', (req, res) => {
-    res.render('pages/home', { 
-        title: 'Home | DevOps Portfolio'
-    });
-});
-
-app.get('/about', (req, res) => {
-    res.render('pages/home', { 
-        title: 'About Me'
+    res.render('index', { 
+        title: 'DevOps Portfolio',
+        deployment: process.env.NODE_ENV || 'development'
     });
 });
 
 app.get('/projects', (req, res) => {
     const projects = [
         {
-            id: 1,
-            title: 'Portfolio Website',
-            description: 'A complete portfolio with Docker and CI/CD pipeline',
-            techStack: ['Node.js', 'Express', 'Docker', 'GitHub Actions'],
-            githubUrl: '#',
-            liveUrl: '#'
+            name: 'Portfolio App',
+            description: 'Complete DevOps pipeline with Docker, CI/CD',
+            technologies: ['Node.js', 'Docker', 'GitHub Actions', 'Render']
         },
         {
-            id: 2,
-            title: 'Task Manager API',
+            name: 'Task Manager API',
             description: 'REST API with authentication',
-            techStack: ['Node.js', 'MongoDB', 'JWT'],
-            githubUrl: '#',
-            liveUrl: '#'
+            technologies: ['Express', 'MongoDB', 'JWT']
         }
     ];
-    res.render('pages/projects', {
-        title: 'My Projects',
-        projects: projects
+    res.render('projects', { projects });
+});
+
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        service: 'portfolio-app',
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString(),
+        github_actions: process.env.GITHUB_ACTIONS || 'false'
     });
 });
 
-app.get('/blog', (req, res) => {
-    res.render('pages/home', {
-        title: 'Blog'
+app.get('/deployment-info', (req, res) => {
+    res.json({
+        docker: 'Containerized',
+        ci_cd: 'GitHub Actions',
+        deployment: 'Render.com',
+        status: 'Live'
     });
 });
 
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
-    console.log(`🌐 Visit: http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`
+    🚀 DevOps Portfolio App
+    🔗 Local: http://localhost:${PORT}
+    🔗 Health: http://localhost:${PORT}/health
+    📦 Docker: Ready
+    ⚡ CI/CD: GitHub Actions
+    ☁️  Deploy: Render.com
+    
+    ✅ Complete DevOps Pipeline!
+    `);
 });
+
+module.exports = app;
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projects</title>
+    <style>
+        body { font-family: Arial; padding: 2rem; background: #f5f5f5; }
+        .project-card { background: white; padding: 1.5rem; margin: 1rem 0; border-radius: 10px; }
+        .tech-tag { background: #667eea; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; display: inline-block; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <h1>My DevOps Projects</h1>
+    <% projects.forEach(project => { %>
+    <div class="project-card">
+        <h3><%= project.name %></h3>
+        <p><%= project.description %></p>
+        <div>
+            <% project.technologies.forEach(tech => { %>
+            <span class="tech-tag"><%= tech %></span>
+            <% }) %>
+        </div>
+    </div>
+    <% }) %>
+    <a href="/">← Back to Home</a>
+</body>
+</html>
