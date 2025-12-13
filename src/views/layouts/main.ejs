@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .navbar { background: #333; color: white; padding: 1rem; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: white; text-decoration: none; }
+        .footer { background: #222; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/" style="color: white; text-decoration: none; font-size: 1.5rem;">
+                Dev<span style="color: #4CAF50;">Portfolio</span>
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <% if (content === 'home') { %>
+            <section class="hero">
+                <h1>Welcome to My DevOps Portfolio</h1>
+                <p>Full Stack Developer & DevOps Engineer</p>
+                <a href="/projects" class="btn">View My Projects</a>
+            </section>
+            
+            <section class="features">
+                <h2>Skills & Technologies</h2>
+                <div class="skills-grid">
+                    <div class="skill">
+                        <i class="fas fa-code"></i>
+                        <h3>Web Development</h3>
+                        <p>Node.js, Express, React, EJS</p>
+                    </div>
+                    <div class="skill">
+                        <i class="fas fa-server"></i>
+                        <h3>DevOps</h3>
+                        <p>Docker, CI/CD, GitHub Actions</p>
+                    </div>
+                    <div class="skill">
+                        <i class="fas fa-cloud"></i>
+                        <h3>Deployment</h3>
+                        <p>Render, Railway, Cloud Platforms</p>
+                    </div>
+                </div>
+            </section>
+        <% } else if (content === 'projects') { %>
+            <h1>My Projects</h1>
+            <div class="projects-grid">
+                <% if (projects && projects.length > 0) { %>
+                    <% projects.forEach(project => { %>
+                    <div class="project-card">
+                        <h3><%= project.title %></h3>
+                        <p><%= project.description %></p>
+                        <div class="tech-stack">
+                            <% project.techStack.forEach(tech => { %>
+                            <span class="tech-tag"><%= tech %></span>
+                            <% }) %>
+                        </div>
+                        <div class="project-links">
+                            <a href="<%= project.githubUrl %>" class="github-link">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            <% if (project.liveUrl && project.liveUrl !== '#') { %>
+                            <a href="<%= project.liveUrl %>" class="live-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No projects found.</p>
+                <% } %>
+            </div>
+        <% } else if (content === 'about') { %>
+            <h1>About Me</h1>
+            <p>I'm a passionate developer learning DevOps and cloud technologies.</p>
+            <h3>Skills:</h3>
+            <ul>
+                <li>Node.js & Express</li>
+                <li>Docker & Containerization</li>
+                <li>CI/CD with GitHub Actions</li>
+                <li>Cloud Deployment (Render, Railway)</li>
+                <li>JavaScript, HTML, CSS</li>
+            </ul>
+        <% } else if (content === 'blog') { %>
+            <h1>Blog Posts</h1>
+            <p>Coming soon...</p>
+        <% } else if (content === '404') { %>
+            <h1>404 - Page Not Found</h1>
+            <p>The page you're looking for doesn't exist.</p>
+            <a href="/">Go Back Home</a>
+        <% } %>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2024 DevOps Portfolio. Built with Node.js & Docker.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #aaa;">
+            This project demonstrates a complete DevOps pipeline with Docker and CI/CD
+        </p>
+    </footer>
+    
+    <script>
+        // Simple JavaScript for interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Portfolio app loaded successfully!');
+        });
+    </script>
+</body>
+</html>
+  
