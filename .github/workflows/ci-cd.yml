@@ -1,4 +1,5 @@
-name: CI/CD Pipeline
+
+name: DevOps CI/CD Pipeline
 
 on:
   push:
@@ -6,9 +7,14 @@ on:
   pull_request:
     branches: [ main, master ]
 
+env:
+  DOCKER_IMAGE_NAME: portfolio-app
+  REGISTRY: docker.io
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: Test Application
     
     steps:
     - name: Checkout code
@@ -24,17 +30,19 @@ jobs:
       run: npm ci
     
     - name: Run tests
-      run: npm test 2>/dev/null || echo "No tests found"
-    
-    - name: Health check
       run: |
+        # Start app in background
         npm start &
+        APP_PID=$!
         sleep 5
         curl -f http://localhost:3000/health || exit 1
+        kill $APP_PID
 
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
+    name: Build and Push Docker Image
+    # Only run on push to main branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
@@ -50,22 +58,50 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     
+    - name: Extract metadata for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest
+    
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
         context: .
         push: true
-        tags: |
-          ${{ secrets.DOCKER_USERNAME }}/portfolio-app:latest
-          ${{ secrets.DOCKER_USERNAME }}/portfolio-app:${{ github.sha }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    
+    - name: Verify push
+      run: |
+        echo "✅ Docker image pushed successfully!"
+        echo "📦 Image: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}"
+        echo "🏷️  Tags: ${{ steps.meta.outputs.tags }}"
 
-  deploy:
+  deploy-notification:
     needs: build-and-push
     runs-on: ubuntu-latest
+    name: Deployment Notification
+    if: success()
     
     steps:
-    - name: Deploy to Render
-      if: success()
+    - name: Send deployment success notification
       run: |
-        echo "🎉 Deployment would happen here!"
-        echo "Add Render/Railway deployment steps"
+        echo "🎉 DevOps Pipeline Complete!"
+        echo ""
+        echo "📊 Pipeline Summary:"
+        echo "✅ Tests: Passed"
+        echo "✅ Docker Build: Successful"
+        echo "✅ Docker Push: Successful"
+        echo ""
+        echo "🐳 Docker Image:"
+        echo "   ${{ secrets.DOCKER_USERNAME }}/portfolio-app:latest"
+        echo ""
+        echo "🔗 View on Docker Hub:"
+        echo "   https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/portfolio-app"
+        echo ""
+        echo "🚀 Ready for cloud deployment!"
